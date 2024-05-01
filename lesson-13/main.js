@@ -6,12 +6,41 @@ const port = 3000,
   layouts = require("express-ejs-layouts"),
   homeController = require("./controllers/homeController"),
   errorController = require("./controllers/errorController"),
-  app = express();
-  // @TODO: 몽고DB 모듈의 요청
+  app = express(),
+  MongoDB = require("mongodb").MongoClient,
+  dbURL = 'mongodb+srv://ut-node:WvwxUOCR1qtX1i2T@ut-node.shy2gcv.mongodb.net/?retryWrites=true&w=majority&appName=UT-node',
+  dbName = 'ut_node';
 
 // @TODO: 로컬 MongoDB 데이터베이스 서버 연결 설정
+MongoDB.connect(dbURL, (error, client) => {
+  if (error) throw error;
 
+  let db = client.db(dbName);
+  db.collection("contacts")
+      .find()
+      .toArray((error, data) => {
+        if (error) throw error;
+        console.log(data);
+      });
 
+  db.collection("contacts")
+      .insertOne({
+        name: "Andrew",
+        job: "Web Developer",
+        location: "Seoul, Korea",
+      },(error, result) => {
+        if (error) throw error;
+        console.log(result);
+      }); // ut-node
+})
+.then(() => {
+  console.log("DB connnected!")
+})
+.catch((error) => {
+  console.log("DB connection FAILED!");
+  console.log(error);
+  process.exit(1);
+});
 app.set("port", process.env.PORT || port);
 app.set("view engine", "ejs");
 
