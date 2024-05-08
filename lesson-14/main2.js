@@ -2,7 +2,7 @@
 "use strict";
 
 const port = 3001,
-  express = require("express"),
+  express = require("express"), 
   layouts = require("express-ejs-layouts"),
   homeController = require("./controllers/homeController"),
   errorController = require("./controllers/errorController"),
